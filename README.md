@@ -2,7 +2,7 @@
 
 
 
-_Auther: Abeer Rafati_
+_Auther :   Abeer Rafati_
 ## Lab 31
 
 [netlify deployment](https://festive-archimedes-96928a.netlify.app/)
