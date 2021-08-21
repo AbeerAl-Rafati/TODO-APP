@@ -4,7 +4,7 @@ import List from "../list";
 import Header from "../header";
 import DataForm from "../dataForm";
 import { v4 as uuid } from "uuid";
-
+// import './todo.css'
 const ToDo = () => {
   const [list, setList] = useState([]);
   const [incomplete, setIncomplete] = useState([]);
@@ -42,10 +42,14 @@ const ToDo = () => {
   return (
     <>
       <Header incomplete={incomplete} />
-
-      <DataForm handleChange={handleChange} handleSubmit={handleSubmit} />
-
-      <List toggleComplete={toggleComplete} list={list} />
+      <section className='todo'>
+        <div className='form'>
+          <DataForm handleChange={handleChange} handleSubmit={handleSubmit} />
+        </div>
+        <div className='list'>
+          <List toggleComplete={toggleComplete} list={list} />
+        </div>
+      </section>
     </>
   );
 };
