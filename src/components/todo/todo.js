@@ -41,7 +41,7 @@ const ToDo = () => {
 
   return (
     <>
-      <Header incomplete={incomplete} />
+      {/* <Header incomplete={incomplete} /> */}
       <section className='todo'>
         <div className='form'>
           <DataForm handleChange={handleChange} handleSubmit={handleSubmit} />

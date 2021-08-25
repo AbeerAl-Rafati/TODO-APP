@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import cookie from "react-cookies";
 import jwt from "jsonwebtoken";
 import superagent from "superagent";
@@ -7,19 +7,15 @@ const API = "https://auth-server-401.herokuapp.com";
 export const AuthContext = React.createContext();
 
 export default function Auth(props) {
-  const [state, setState] = useState({
-    loggedIn: false,
-    user: {},
-  });
+  const [user, setUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const token = cookie.load("auth");
-    this.validateToken(token);
+    validateToken(token);
   }, []);
 
-  validateToken = (token) => {
-    // don't verify in the frontend!!
-    // const user = jwt.verify(token,'secret')
+  function validateToken(token) {
     if (token !== "null") {
       const user = jwt.decode(token);
       console.log(token, user);
@@ -27,13 +23,14 @@ export default function Auth(props) {
     } else {
       setLoginState(false, null, {});
     }
-  };
-  setLoginState = (loggedIn, token, user) => {
+  }
+  function setLoginState(loggedIn, token, user) {
     cookie.save("auth", token);
-    setState({ token, loggedIn, user });
-  };
-  login = async (username, password) => {
-    // headers{authorization: "Basic anything="}
+    setUser(user);
+    setLoggedIn(loggedIn);
+  }
+
+  async function login(username, password) {
     try {
       const response = await superagent
         .post(`${API}/signin`)
@@ -46,13 +43,39 @@ export default function Auth(props) {
     } catch (error) {
       console.error("LOGIN ERROR", error.message);
     }
-  };
-  logout = () => {
+  }
+  function logout() {
     setLoginState(false, null, {});
-  };
+  }
+
+  async function signup(username, password, role) {
+    try {
+      const response = await superagent.post(`${API}/signup`, {
+        username,
+        password,
+        role,
+      });
+
+      validateToken(response.body.token);
+    } catch (error) {
+      console.error("signup ERROR", error.message);
+    }
+  }
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        loggedIn,
+        setLoggedIn,
+        login,
+        logout,
+        signup,
+        setLoginState,
+        validateToken,
+      }}
+    >
       {props.children}
     </AuthContext.Provider>
   );

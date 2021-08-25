@@ -1,12 +1,18 @@
-import React, { Component, createContext } from 'react'
+import React, {useState, useEffect, createContext } from 'react'
+import axios  from 'axios'
+import { v4 as uuid } from 'uuid';
+import { AuthContext } from './auth';
 
 export const OptionsContext = createContext();
 
-export class OptionsProvider extends Component {
+function OptionsProvider(props){
   state = {
   listNum = 5,
   showCompleted : true
 }
+const [list, setList] = useState([])
+const [listNum, setListNum] = useState()
+const [values, setValues] = useState({})
 
 
 
