@@ -1,8 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './app.js';
-
-
+import React from "react";
+import "./index.css";
+import ReactDOM from "react-dom";
+import App from "./app.js";
 
 class Main extends React.Component {
   render() {
@@ -10,5 +9,5 @@ class Main extends React.Component {
   }
 }
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 ReactDOM.render(<Main />, rootElement);
