@@ -66,14 +66,10 @@ export default function Auth(props) {
     <AuthContext.Provider
       value={{
         user,
-        setUser,
         loggedIn,
-        setLoggedIn,
         login,
         logout,
         signup,
-        setLoginState,
-        validateToken,
       }}
     >
       {props.children}

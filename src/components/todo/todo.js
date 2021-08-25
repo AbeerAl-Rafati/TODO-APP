@@ -1,53 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useForm from "../../hooks/form.js";
 import List from "../list";
-import Header from "../header";
 import DataForm from "../dataForm";
 import { v4 as uuid } from "uuid";
 // import './todo.css'
-const ToDo = () => {
-  const [list, setList] = useState([]);
-  const [incomplete, setIncomplete] = useState([]);
-  const { handleChange, handleSubmit } = useForm(addItem);
-
-  function addItem(item) {
-    console.log(item);
-    item.id = uuid();
-    item.complete = false;
-    setList([...list, item]);
-  }
-
-  function deleteItem(id) {
-    const items = list.filter((item) => item.id !== id);
-    setList(items);
-  }
-
-  function toggleComplete(id) {
-    const items = list.map((item) => {
-      if (item.id == id) {
-        item.complete = !item.complete;
-      }
-      return item;
-    });
-
-    setList(items);
-  }
+import { ListContext } from "../../context/list";
+import { OptionsContext } from "../../context/options";
+const ToDo = (props) => {
+  const listContext = useContext(ListContext);
+  const optionsContext = useContext(OptionsContext);
+  const [state, setState] = useState([]);
 
   useEffect(() => {
-    let incompleteCount = list.filter((item) => !item.complete).length;
-    setIncomplete(incompleteCount);
-    document.title = `To Do List: ${incomplete}`;
-  }, [list]);
+    let localOption = localStorage.getItem("option") === true;
+    if (localOption) {
+      localOption = JSON.parse(localStorage.getItem("option"));
+      optionsContext.setOption(localOption.items, localOption.view);
+    }
+  }, []);
 
   return (
     <>
-      {/* <Header incomplete={incomplete} /> */}
-      <section className='todo'>
-        <div className='form'>
-          <DataForm handleChange={handleChange} handleSubmit={handleSubmit} />
+      <div>
+        There are {listContext.list.filter((task) => !task.complete).length}
+        Items To Complete
+      </div>
+      <section className="todo">
+        <div className="form">
+          <DataForm />
         </div>
-        <div className='list'>
-          <List toggleComplete={toggleComplete} list={list} />
+        <div className="list">
+          <List list={state} />
         </div>
       </section>
     </>

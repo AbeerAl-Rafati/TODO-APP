@@ -1,48 +1,54 @@
-import React, {useState, useEffect, createContext } from 'react'
-import axios  from 'axios'
-import { v4 as uuid } from 'uuid';
-import { AuthContext } from './auth';
+import React, { useState, createContext } from "react";
+// import { v4 as uuid } from "uuid";
+// import { AuthContext } from "./auth";
 
 export const OptionsContext = createContext();
 
-function OptionsProvider(props){
-  state = {
-  listNum = 5,
-  showCompleted : true
-}
-const [list, setList] = useState([])
-const [listNum, setListNum] = useState()
-const [values, setValues] = useState({})
+function OptionsProvider(props) {
+  const [numberOfTasks, setnumberOfTasks] = useState(5);
+  const [view, setView] = useState(false);
+  const [first, setFirst] = useState(0);
+  const [end, setEnd] = useState(numberOfTasks - 1);
 
+  function setOption(numb, val) {
+    setnumberOfTasks(numb);
 
-
-
-
-
-  render() {
-    return (
-     <OptionsContext.Provider value={{...this.state}}>
-       {this.props.children}
-     </OptionsContext.Provider>
-    )
+    setView(val);
   }
+  function nextpage() {
+    setFirst(first + numberOfTasks);
+    setEnd(end + numberOfTasks);
+  }
+  function previouspage() {
+    setFirst(first - numberOfTasks);
+    setEnd(end - numberOfTasks);
+  }
+
+  return (
+    <OptionsContext.Provider
+      value={{
+        numberOfTasks,
+        view,
+        first,
+        end,
+        setOption,
+        nextpage,
+        previouspage,
+      }}
+    >
+      {props.children}
+    </OptionsContext.Provider>
+  );
 }
 
-export default OptionsProvider
-
-
+export default OptionsProvider;
 
 // import {useState} from 'react'
 
 // export const optionsContext = React.createContext()
 
-
-
 // function Options(props) {
-  
-  
 
-  
 //   return (
 //    <optionsContext.Provider value={{}}>
 //        {props.children}
